@@ -7,10 +7,10 @@ public class Frete {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name="cliente_id")
     private Cliente cliente;
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name="cidade_id")
     private Cidade cidade;
 

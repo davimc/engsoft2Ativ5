@@ -4,14 +4,18 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.*;
 
 @Entity
 public class Cidade {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @NotEmpty(message="O nome deve ser preenchido")
     private String nome;
+    @NotEmpty(message="O estado deve ser preenchido")
     private String uf;
+    @NotEmpty(message="A taxa deve ser preenchido")
     private double taxa;
 
     public Cidade() {
