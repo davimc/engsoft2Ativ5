@@ -10,12 +10,12 @@ public class FreteBuilder {
     public FreteBuilder(){
 
     }
-    public static FreteBuilder umFrete(){
+    public static FreteBuilder umFrete(Cliente cliente, Cidade cidade){
         FreteBuilder builder = new FreteBuilder();
         builder.frete = new Frete();
-        builder.frete.setCidade(CidadeBuilder.umaCidade().constroi());
-        builder.frete.setCliente(ClienteBuilder.umCliente().constroi());
-        builder.frete.getDescricacao("Geladeira");
+        builder.frete.setCidade(cidade);
+        builder.frete.setCliente(cliente);
+        builder.frete.setDescricacao("Geladeira");
         builder.frete.setPeso(15);
         builder.frete.setValor(1500);
 

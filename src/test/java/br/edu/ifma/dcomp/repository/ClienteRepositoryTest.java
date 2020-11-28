@@ -31,10 +31,7 @@ public class ClienteRepositoryTest {
         cliente = new Cliente("Davi","rua dos prazeres","982186943");
     }
 
-    @AfterEach
-    public void end(){
-        repository.deleteAll();
-    }
+
     @Test
     public void salvaComNomeNulo()throws Exception{
         ConstraintViolationException exception = assertThrows(ConstraintViolationException.class,()->{
@@ -56,11 +53,13 @@ public class ClienteRepositoryTest {
         repository.save(cliente);
         List<Cliente> clientes = repository.findAll();
         Assertions.assertEquals(1,clientes.size());
+        repository.deleteAll();
     }
     @Test
     public void testaEncontrarPorTelefone(){
         repository.save(cliente);
         Optional<Cliente> cliente = repository.findByTelefone("982186943");
         Assertions.assertTrue(cliente.isPresent());
+        repository.deleteAll();
     }
 }

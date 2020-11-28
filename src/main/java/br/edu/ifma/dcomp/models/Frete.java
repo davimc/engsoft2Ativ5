@@ -1,6 +1,8 @@
 package br.edu.ifma.dcomp.models;
 
 import javax.persistence.*;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 
 @Entity
 public class Frete {
@@ -15,7 +17,9 @@ public class Frete {
     private Cidade cidade;
 
     private String descricacao;
+    @Positive(message = "O peso precisa ter um valor acima de 0")
     private double peso;
+    @PositiveOrZero
     private double valor;
 
     public Frete() {

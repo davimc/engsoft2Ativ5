@@ -15,7 +15,7 @@ public class Cidade {
     private String nome;
     @NotEmpty(message="O estado deve ser preenchido")
     private String uf;
-    @NotEmpty(message="A taxa deve ser preenchido")
+    @PositiveOrZero(message = "A taxa deve ser maior ou igual a zero")
     private double taxa;
 
     public Cidade() {

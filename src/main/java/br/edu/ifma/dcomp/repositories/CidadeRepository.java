@@ -11,6 +11,7 @@ import java.util.List;
 @Repository
 public interface CidadeRepository extends JpaRepository<Cidade, Integer> {
     Cidade findByNome(String nome);
+    List<Cidade> findByUf(String uf);
     @Query(value="From Cidade")
     List<Cidade> todos(Sort sort);
 }

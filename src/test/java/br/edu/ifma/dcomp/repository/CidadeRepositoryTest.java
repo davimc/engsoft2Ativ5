@@ -22,35 +22,51 @@ public class CidadeRepositoryTest {
     @Autowired
     private CidadeRepository repository;
 
-    private Cidade Cidade;
+    private Cidade cidade;
 
     @BeforeEach
     public void start(){
-        Cidade = new Cidade("São Luís","MA",13.5);
+        cidade = new Cidade("São Luís","MA",13.5);
     }
 
     @Test
     public void salvaComNomeNulo()throws Exception{
         ConstraintViolationException exception = assertThrows(ConstraintViolationException.class,()->{
-           Cidade.setNome(null);
-           repository.save(Cidade);
+           cidade.setNome(null);
+           repository.save(cidade);
         },"Deveria lançar um ConstraintViolationException");
         Assertions.assertTrue(exception.getMessage().contains("O nome deve ser preenchido"));
     }
     @Test
     public void salvaComEnderecoVazio() throws Exception{
         ConstraintViolationException exception = assertThrows(ConstraintViolationException.class,()->{
-            //Cidade.setEndereco("");
-            repository.save(Cidade);
+            cidade.setUf("");
+            repository.save(cidade);
         },"Deveria lançar um ConstraintViolationException");
-        Assertions.assertTrue(exception.getMessage().contains("O endereco deve ser preenchido"));
+        Assertions.assertTrue(exception.getMessage().contains("O estado deve ser preenchido"));
+    }
+    @Test
+    public void salvaComTaxaNegativa()throws Exception{
+        ConstraintViolationException exception = assertThrows(ConstraintViolationException.class,()->{
+            cidade.setTaxa(-13.5);
+            repository.save(cidade);
+        },"Deveria lançar um ConstraintViolationException");
+        Assertions.assertTrue(exception.getMessage().contains("A taxa deve ser maior ou igual a zero"));
     }
     @Test
     public void testaSalvar(){
-        repository.save(Cidade);
-        List<Cidade> Cidades = repository.findAll();
-        Assertions.assertEquals(1,Cidades.size());
+        repository.save(cidade);
+        List<Cidade> cidades = repository.findAll();
+        Assertions.assertEquals(1,cidades.size());
         repository.deleteAll();
     }
 
+    @Test
+    public void testaDeletar(){
+        repository.save(cidade);
+        Assertions.assertDoesNotThrow(()->{
+            repository.delete(cidade);
+            Assertions.assertEquals(0,repository.findAll().size());
+        });
+    }
 }
