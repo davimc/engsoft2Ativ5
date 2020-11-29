@@ -25,12 +25,11 @@ public class Frete {
     public Frete() {
     }
 
-    public Frete(Cliente cliente, Cidade cidade, String descricacao, double peso, double valor) {
+    public Frete(Cliente cliente, Cidade cidade, String descricacao, double peso) {
         this.cliente = cliente;
         this.cidade = cidade;
         this.descricacao = descricacao;
         this.peso = peso;
-        this.valor = valor;
     }
 
     public int getId() {

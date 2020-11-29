@@ -17,6 +17,7 @@ import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.domain.Sort;
 
 import javax.validation.ConstraintViolationException;
@@ -67,7 +68,6 @@ public class FreteRepositoryTest {
             repository.save(frete);
         },"Deveria lançar um DataIntegrytiViolationException");
     }
-
     @Test
     public void testaSalvarComPesoZero(){
         ConstraintViolationException exception = assertThrows(ConstraintViolationException.class, ()->{
@@ -79,6 +79,7 @@ public class FreteRepositoryTest {
     @Test
     public void salvarUmFrete(){
         Assertions.assertDoesNotThrow(()->{
+            frete.setCliente(ClienteBuilder.umCliente().constroi());
             repository.save(frete);
             assertEquals(1,repository.findAll().size());
             repository.deleteAll();
@@ -87,11 +88,11 @@ public class FreteRepositoryTest {
     @Test
     public void testaBuscarListarFretesDeUmClienteOrdenadosPorValor(){
         repository.save(frete);
-        repository.save(FreteBuilder.umFrete(cliente,cidade).comProduto("Kindle",12.5,242.00).constroi());
-        repository.save(FreteBuilder.umFrete(cliente,cidade).comProduto("Televisao",12.5,1000.50).constroi());
+        repository.save(FreteBuilder.umFrete(cliente,cidade).comProduto("Kindle",12.5).comValor(242.00).constroi());
+        repository.save(FreteBuilder.umFrete(cliente,cidade).comProduto("Televisao",12.5).comValor(1000.50).constroi());
         Cliente cliente2 =ClienteBuilder.umCliente().comTelefone("982186942").comNome("Carol").constroi();
         clienteRepository.save(cliente2);
-        repository.save(FreteBuilder.umFrete(cliente2, cidade).comProduto("Iphone",3300.00,20.00).constroi());
+        repository.save(FreteBuilder.umFrete(cliente2, cidade).comProduto("Iphone",3300.00).comValor(20.00).constroi());
         List<Frete> fretes = repository.findByCliente(cliente, Sort.by("valor").ascending());
         fretes.stream().forEach(frete->{
             assertEquals("Davi",frete.getCliente().getNome());
