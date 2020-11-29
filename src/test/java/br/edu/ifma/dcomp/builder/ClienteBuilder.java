@@ -20,6 +20,10 @@ public class ClienteBuilder {
         cliente.setTelefone(telefone);
         return this;
     }
+    public ClienteBuilder comNome(String nome){
+        cliente.setNome(nome);
+        return this;
+    }
     public Cliente constroi(){
         return cliente;
     }

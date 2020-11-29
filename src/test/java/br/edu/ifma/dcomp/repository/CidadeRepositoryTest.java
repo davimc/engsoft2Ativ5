@@ -1,5 +1,7 @@
 package br.edu.ifma.dcomp.repository;
 
+import br.edu.ifma.dcomp.builder.CidadeBuilder;
+import br.edu.ifma.dcomp.builder.ClienteBuilder;
 import br.edu.ifma.dcomp.models.Cidade;
 import br.edu.ifma.dcomp.repositories.CidadeRepository;
 import org.junit.jupiter.api.Assertions;
@@ -9,10 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Sort;
 
 import javax.validation.ConstraintViolationException;
+import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DataJpaTest
@@ -68,5 +73,14 @@ public class CidadeRepositoryTest {
             repository.delete(cidade);
             Assertions.assertEquals(0,repository.findAll().size());
         });
+    }
+    @Test
+    public void testaTodos(){
+        repository.save(cidade);
+        repository.save(CidadeBuilder.umaCidade().comNome("Lugar").comTaxa(12.0).constroi());
+        List<Cidade> cidades = repository.todos(Sort.by("nome").ascending());
+        Assertions.assertEquals(2,cidades.size());
+        assertEquals(repository.findAll().get(1).getNome(),cidades.get(0).getNome());
+        repository.deleteAll();
     }
 }

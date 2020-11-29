@@ -29,6 +29,13 @@ public class FreteBuilder {
         frete.setCidade(cidade);
         return this;
     }
+    public FreteBuilder comProduto(String descricacao, double peso, double valor){
+        frete.setDescricacao(descricacao);
+        frete.setPeso(peso);
+        frete.setValor(valor);
+
+        return this;
+    }
     public Frete constroi(){
         return frete;
     }

@@ -76,5 +76,16 @@ public class Frete {
     public void setValor(double valor) {
         this.valor = valor;
     }
+
+    @Override
+    public String toString() {
+        return "Frete{" +
+                "cliente=" + cliente.getNome() +
+                ", cidade=" + cidade.getNome()+"("+cidade.getUf().toUpperCase()+") " +
+                ", descricacao='" + descricacao + '\'' +
+                ", peso=" + peso +
+                ", valor=" + valor +
+                '}';
+    }
 }
 
