@@ -83,11 +83,5 @@ public class FreteRepositoryTest {
             repository.deleteAll();
         });
     }
-    /*@Test
-    public void testaEncontrarPorTelefone(){
-        repository.save(frete);
-        Optional<Frete> frete = repository.findByTelefone("982186943");
-        Assertions.assertTrue(frete.isPresent());
-        repository.deleteAll();
-    }*/
+
 }
