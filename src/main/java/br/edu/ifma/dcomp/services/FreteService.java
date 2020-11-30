@@ -1,5 +1,6 @@
 package br.edu.ifma.dcomp.services;
 
+import br.edu.ifma.dcomp.models.Cidade;
 import br.edu.ifma.dcomp.models.Frete;
 import br.edu.ifma.dcomp.repositories.FreteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,5 +37,8 @@ public class FreteService {
     }
     public double calcula(Frete frete){
         return frete.getPeso()*VALOR_FIXO+frete.getCidade().getTaxa();
+    }
+    public Cidade maiorDestinataria(){
+        repository.findAll().stream().
     }
 }
