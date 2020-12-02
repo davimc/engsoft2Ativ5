@@ -8,13 +8,17 @@ import br.edu.ifma.dcomp.models.Cliente;
 import br.edu.ifma.dcomp.models.Frete;
 import br.edu.ifma.dcomp.repositories.CidadeRepository;
 import br.edu.ifma.dcomp.repositories.ClienteRepository;
-import br.edu.ifma.dcomp.services.FreteException;
+import br.edu.ifma.dcomp.exceptions.FreteException;
 import br.edu.ifma.dcomp.services.FreteService;
+import br.edu.ifma.dcomp.services.FreteServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import javax.validation.ConstraintViolationException;
+import javax.xml.bind.ValidationException;
 
 @SpringBootTest
 public class FreteServiceTest {
@@ -39,35 +43,43 @@ public class FreteServiceTest {
     }
 
     @Test
-    public void cadastraFrete(){
+    public void inserirOuAlterarFrete(){
         Assertions.assertDoesNotThrow(()->{
-            service.cadastra(frete);
+            service.inserirOuAlterar(frete);
         });
     }
     @Test
-    public void cadastraFreteComClienteNaoSalvo()throws Exception{
+    public void inserirOuAlterarFreteComClienteNaoSalvo()throws Exception{
         Assertions.assertThrows(FreteException.class,()->{
            frete.setCliente(ClienteBuilder.umCliente().constroi());
-           service.cadastra(frete);
-        },"deveria lançar um FreteException porque o cliente não está cadastrado");
+           service.inserirOuAlterar(frete);
+        },"deveria lançar um FreteException porque o cliente não está inserirOuAlterardo");
     }
+
     @Test
-    public void cadastraFreteComCidadeNaoSalva()throws Exception{
+    public void inserirOuAlterarFreteComCidadeNaoSalva()throws Exception{
         Assertions.assertThrows(FreteException.class,()->{
             frete.setCidade(CidadeBuilder.umaCidade().constroi());
-            service.cadastra(frete);
-        },"deveria lançar um FreteException porque o cliente não está cadastrado");
+            service.inserirOuAlterar(frete);
+        },"deveria lançar um FreteException porque o cliente não está inserirOuAlterardo");
+    }
+    @Test
+    public void inserirOuAlterarFreteComPesoNegativo()throws Exception{
+        Assertions.assertThrows(ConstraintViolationException.class, ()->{
+            frete.setPeso(-1);
+            service.inserirOuAlterar(frete);
+        },"deveria lançar um ConstraintViolation porque o peso está negativo");
     }
     @Test
     public void testaMaiorFrete(){
         try {
-            service.cadastra(frete);
+            service.inserirOuAlterar(frete);
             frete = FreteBuilder.umFrete(cliente,cidade).comProduto("Televisao",8).constroi();
-            service.cadastra(frete);
+            service.inserirOuAlterar(frete);
             frete = FreteBuilder.umFrete(cliente,cidade).comProduto("Kindle",1).constroi();
-            service.cadastra(frete);
+            service.inserirOuAlterar(frete);
             frete = FreteBuilder.umFrete(cliente,cidade).comProduto("Iphone",1).constroi();
-            service.cadastra(frete);
+            service.inserirOuAlterar(frete);
             frete = service.maiorFrete();
             Assertions.assertEquals("Geladeira",frete.getDescricacao());
         }catch(FreteException e){

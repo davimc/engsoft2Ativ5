@@ -3,6 +3,7 @@ package br.edu.ifma.dcomp.models;
 import javax.persistence.*;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
+import java.util.Objects;
 
 @Entity
 public class Frete {
@@ -19,7 +20,7 @@ public class Frete {
     private String descricacao;
     @Positive(message = "O peso precisa ter um valor acima de 0")
     private double peso;
-    @PositiveOrZero
+    @PositiveOrZero(message ="O valor precisa ser positivo")
     private double valor;
 
     public Frete() {
@@ -77,6 +78,20 @@ public class Frete {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Frete frete = (Frete) o;
+        return Double.compare(frete.peso, peso) == 0 &&
+                Double.compare(frete.valor, valor) == 0 &&
+                Objects.equals(descricacao, frete.descricacao);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, cliente, cidade, descricacao, peso, valor);
+    }
+@Override
     public String toString() {
         return "Frete{" +
                 "cliente=" + cliente.getNome() +

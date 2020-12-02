@@ -69,7 +69,7 @@ public class FreteRepositoryTest {
         },"Deveria lançar um DataIntegrytiViolationException");
     }
     @Test
-    public void testaSalvarComPesoZero(){
+    public void testaSalvarComPesoZero() throws Exception{
         ConstraintViolationException exception = assertThrows(ConstraintViolationException.class, ()->{
             frete.setPeso(0);
             repository.save(frete);
