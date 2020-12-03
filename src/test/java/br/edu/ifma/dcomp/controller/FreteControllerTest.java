@@ -150,7 +150,54 @@ public class FreteControllerTest {
 
 
     /*-------------PUT--------------*/
+    @Test
+    public void deveAlterarFrete(){
+        frete.setPeso(95);
+        frete.setDescricacao("Estante");
+        HttpEntity<Frete> httpEntity = new HttpEntity<>(frete);
+        ResponseEntity<Frete> resposta =
+                testRestTemplate.exchange("/frete/alterar/{id}",HttpMethod.PUT, httpEntity,
+                        Frete.class,frete.getId());
+        Assertions.assertEquals(HttpStatus.CREATED,resposta.getStatusCode());
+        Frete resultado = resposta.getBody();
+        Assertions.assertEquals(frete.getId(), resultado.getId());
+        Assertions.assertEquals(frete.getPeso(), resultado.getPeso());
+        Assertions.assertEquals(frete.getDescricacao(), resultado.getDescricacao());
+    }
+    @Test
+    public void alterarUsuarioComAtributosNulosDeveRetornar()throws Exception{
+        frete.setValor(-1.5);
+        frete.setPeso(0);
+        HttpEntity<Frete> httpEntity = new HttpEntity<>(frete);
+        ResponseEntity<Frete> resposta =
+                testRestTemplate.exchange("/frete/alterar/{id}",HttpMethod.PUT,
+                        httpEntity,Frete.class,frete.getId());
 
-
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST,resposta.getStatusCode());
+        System.out.println(resposta.getBody());
+        System.out.println(resposta.toString());
+       /* Assertions.assertTrue((resposta.getBody().contains("O peso precisa ter um valor acima de 0")));
+        Assertions.assertTrue((resposta.getBody().contains("O valor precisa ser positivo")));*/
+    }
     /*----------DELETE-------------*/
+    @Test
+    public void deveExcluirFrete(){
+        ResponseEntity<Frete> resposta =
+                testRestTemplate.exchange("/frete/remover/{id}",HttpMethod.DELETE, null,
+                        Frete.class, frete.getId());
+
+        Assertions.assertEquals(HttpStatus.NO_CONTENT,resposta.getStatusCode());
+        Assertions.assertNull(resposta.getBody());
+    }
+    @Test
+    public void testaExcluirFreteQueNaoExiste(){
+        ResponseEntity<Frete> resposta =
+                testRestTemplate.exchange("/frete/remover/{id}",HttpMethod.DELETE, null,
+                        Frete.class, 100);
+
+        Assertions.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR,resposta.getStatusCode());
+        Assertions.assertTrue(resposta.getBody().toString().contains("Frete{vazio}"));
+        //por algum motivo ele ainda tenta criar um Frete, mesmo que vazio
+        //diferente do deletar com sucesso, que manda um null
+    }
 }

@@ -93,13 +93,18 @@ public class Frete {
     }
 @Override
     public String toString() {
-        return "Frete{" +
-                "cliente=" + cliente.getNome() +
-                ", cidade=" + cidade.getNome()+"("+cidade.getUf().toUpperCase()+") " +
-                ", descricacao='" + descricacao + '\'' +
-                ", peso=" + peso +
-                ", valor=" + valor +
-                '}';
+        String mensagem = "Frete{";
+                try {
+                    mensagem+=("cliente=" + cliente.getNome() +
+                            ", cidade=" + cidade.getNome() + "(" + cidade.getUf().toUpperCase() + ") "+
+                            ", descricacao='" + descricacao + '\'' +
+                            ", peso=" + peso +
+                            ", valor=" + valor +
+                            '}');
+                }catch (NullPointerException e){
+                    mensagem+=("vazio}");
+                }
+        return mensagem;
     }
 }
 
